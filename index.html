@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hostel Student Finance Manager</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <div class="header-content">
+                <h1><i class="fa-solid fa-wallet"></i> Student Finance</h1>
+                <p id="current-date">Loading date...</p>
+            </div>
+            <div class="health-indicator" id="health-indicator">
+                <span class="status-dot"></span>
+                <span class="status-text">Financial Health: Unknown</span>
+            </div>
+        </header>
+
+        <main>
+            <!-- Dashboard Overview -->
+            <section class="dashboard-grid">
+                <div class="card balance-card">
+                    <h3>Current Balance</h3>
+                    <div class="amount" id="current-balance">Rs.0</div>
+                    <p class="subtitle">Remaining from allowance</p>
+                </div>
+                <div class="card allowance-card">
+                    <h3>Monthly Allowance</h3>
+                    <div class="amount" id="total-allowance">Rs.0</div>
+                    <button id="edit-allowance-btn" class="icon-btn"><i class="fa-solid fa-pen"></i></button>
+                </div>
+                <div class="card spent-card">
+                    <h3>Total Spent</h3>
+                    <div class="amount" id="total-spent">Rs.0</div>
+                    <p class="subtitle">This month</p>
+                </div>
+                <div class="card days-card">
+                    <h3>Days Left</h3>
+                    <div class="amount" id="days-left">0</div>
+                    <p class="subtitle">In current month</p>
+                </div>
+            </section>
+
+            <!-- Savings Goal Section -->
+            <section class="savings-section">
+                <div class="card savings-card">
+                    <div class="card-header">
+                        <h3><i class="fa-solid fa-piggy-bank"></i> Savings Goal</h3>
+                        <button id="edit-goal-btn" class="text-btn">Set Goal</button>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-info">
+                            <span id="savings-progress-text">Rs.0 saved of Rs.0 goal</span>
+                            <span id="savings-percentage">0%</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" id="savings-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="main-content-grid">
+                <!-- Add Expense Form -->
+                <section class="form-section">
+                    <div class="card form-card">
+                        <h3><i class="fa-solid fa-plus-circle"></i> Log Expense</h3>
+                        <form id="expense-form">
+                            <div class="form-group">
+                                <label for="expense-amount">Amount (Rs.)</label>
+                                <input type="number" id="expense-amount" placeholder="e.g. 150" required min="1">
+                            </div>
+                            <div class="form-group">
+                                <label for="expense-category">Category</label>
+                                <select id="expense-category" required>
+                                    <option value="food">🍔 Food</option>
+                                    <option value="transport">🚌 Transport</option>
+                                    <option value="entertainment">🎬 Entertainment</option>
+                                    <option value="stationary">✏️ Stationary</option>
+                                    <option value="bills">💡 Bills/Recharge</option>
+                                    <option value="shopping">🛍️ Shopping</option>
+                                    <option value="other">📦 Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="expense-date">Date</label>
+                                <input type="date" id="expense-date" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="expense-note">Note (Optional)</label>
+                                <input type="text" id="expense-note" placeholder="What was this for?">
+                            </div>
+                            <button type="submit" class="primary-btn">Add Expense</button>
+                        </form>
+                    </div>
+                </section>
+
+                <!-- Recent Transactions -->
+                <section class="transactions-section">
+                    <div class="card transactions-card">
+                        <div class="card-header">
+                            <h3>Recent Expenses</h3>
+                            <div class="filters">
+                                <button class="filter-btn active" data-filter="all">All</button>
+                                <button class="filter-btn" data-filter="today">Today</button>
+                                <button class="filter-btn" data-filter="week">Week</button>
+                            </div>
+                        </div>
+                        <div class="transactions-list" id="transactions-list">
+                            <!-- Transactions will be injected here by JS -->
+                            <div class="empty-state">
+                                <i class="fa-solid fa-receipt"></i>
+                                <p>No expenses recorded yet.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+    
+    <footer>
+        <p>&copy; 2026 Faizullah Khan. All rights reserved.</p>
+    </footer>
+
+    <!-- Modals -->
+    <div id="allowance-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Set Monthly Allowance</h2>
+            <form id="allowance-form">
+                <div class="form-group">
+                    <label for="allowance-input">Total Allowance (Rs.)</label>
+                    <input type="number" id="allowance-input" placeholder="e.g. 5000" required min="1">
+                </div>
+                <button type="submit" class="primary-btn">Save Allowance</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="goal-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Set Savings Goal</h2>
+            <form id="goal-form">
+                <div class="form-group">
+                    <label for="goal-input">Target Amount (Rs.)</label>
+                    <input type="number" id="goal-input" placeholder="e.g. 1000" required min="1">
+                </div>
+                <button type="submit" class="primary-btn">Set Goal</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
